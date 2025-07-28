@@ -18,7 +18,10 @@ final class NetworkManager: NetworkClient {
     }
 
     func request<T: Decodable>(_ endpoint: Endpoint) async throws -> T {
-        var request = URLRequest(url: endpoint.url)
+        guard let url = endpoint.url else {
+            throw NetworkError.invalidURL
+        }
+        var request = URLRequest(url: url)
         request.httpMethod = endpoint.method.rawValue
         endpoint.headers.forEach { request.setValue($0.value, forHTTPHeaderField: $0.key) }
 

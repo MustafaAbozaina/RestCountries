@@ -9,6 +9,7 @@ enum NetworkError: Error, Equatable {
     case statusCode(Int)
     case decoding(Error)
     case custom(Error)
+    case invalidURL
 
     static func == (lhs: NetworkError, rhs: NetworkError) -> Bool {
         switch (lhs, rhs) {
