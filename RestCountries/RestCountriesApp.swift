@@ -10,10 +10,13 @@ import SwiftData
 
 @main
 struct RestCountriesApp: App {
+    @StateObject private var navigationManager = NavigationManager()
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            Navigator(navigationManager: navigationManager) {
+                CountriesSearchView(viewModel: CountriesSearchFactory.makeCountriesSearchViewModel())
+            }
         }
     }
 }

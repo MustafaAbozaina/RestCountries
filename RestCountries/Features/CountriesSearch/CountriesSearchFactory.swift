@@ -1,25 +1,18 @@
 //
-//  ContentView.swift
+//  CountriesSearchFactory.swift
 //  RestCountries
 //
 //  Created by Mustafa Abozaina on 7/28/25.
 //
+import Foundation
 
-import SwiftUI
-import SwiftData
-
-struct ContentView: View {
-    var body: some View {
+class CountriesSearchFactory {
+    static func makeCountriesSearchViewModel() -> CountriesSearchViewModel {
         let network = NetworkManager(session: URLSession.shared)
         let remoteDataSource = DefaultCountriesRemoteDataSource(networkService: network)
         let repo = DefaultCountriesRepository(remoteDataSource: remoteDataSource)
         let useCase = DefaultGetCountriesUseCase(repository: repo)
-        NavigationStack {
-            CountriesSearchView(viewModel: CountriesSearchViewModel(getCountriesUseCase: useCase))
-        }
+        let viewModel = CountriesSearchViewModel(getCountriesUseCase: useCase)
+        return viewModel
     }
-}
-
-#Preview {
-    ContentView()
 }
