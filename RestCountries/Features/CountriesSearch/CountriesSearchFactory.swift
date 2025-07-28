@@ -7,12 +7,13 @@
 import Foundation
 
 class CountriesSearchFactory {
-    static func makeCountriesSearchViewModel() -> CountriesSearchViewModel {
+    static func makeCountriesSearchViewModel(navigationManager: NavigationManager) -> CountriesSearchViewModel {
         let network = NetworkManager(session: URLSession.shared)
         let remoteDataSource = DefaultCountriesRemoteDataSource(networkService: network)
         let repo = DefaultCountriesRepository(remoteDataSource: remoteDataSource)
         let useCase = DefaultGetCountriesUseCase(repository: repo)
-        let viewModel = CountriesSearchViewModel(getCountriesUseCase: useCase)
+        let router = DefaultCountriesSearchRouter(navigationManager: navigationManager)
+        let viewModel = CountriesSearchViewModel(getCountriesUseCase: useCase, router: router)
         return viewModel
     }
 }

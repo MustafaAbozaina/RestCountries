@@ -24,7 +24,7 @@ struct CountriesSearchView: View {
                 List {
                     ForEach(viewModel.selectedCountries, id: \.self) { country in
                         Button {
-                            //TODO: Navigte to details
+                            viewModel.didTapMyCountry(country: country)
                         } label: {
                         Text("Country: \(country.name)")
                         }

@@ -15,7 +15,7 @@ struct RestCountriesApp: App {
     var body: some Scene {
         WindowGroup {
             Navigator(navigationManager: navigationManager) {
-                CountriesSearchView(viewModel: CountriesSearchFactory.makeCountriesSearchViewModel())
+                CountriesSearchView(viewModel: CountriesSearchFactory.makeCountriesSearchViewModel(navigationManager: navigationManager))
             }
         }
     }

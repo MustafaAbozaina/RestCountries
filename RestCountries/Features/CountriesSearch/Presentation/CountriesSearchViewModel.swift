@@ -16,9 +16,15 @@ class CountriesSearchViewModel: ObservableObject {
     
     private var cancellables = Set<AnyCancellable>()
     private let getCountriesUseCase: GetCountriesUseCase
+    let router: CountriesSearchRouter
+    
+    var shouldDisableNewSelection: Bool {
+        selectedCountries.count >= 5
+    }
 
-    init(getCountriesUseCase: GetCountriesUseCase) {
+    init(getCountriesUseCase: GetCountriesUseCase, router: CountriesSearchRouter) {
         self.getCountriesUseCase = getCountriesUseCase
+        self.router = router
         
         $searchText
             .removeDuplicates()
@@ -42,12 +48,13 @@ class CountriesSearchViewModel: ObservableObject {
     }
     
     func selectCountry(_ country: Country) {
-        guard !selectedCountries.contains(country)  else { return }
-        
+        guard !selectedCountries.contains(country), !shouldDisableNewSelection   else { return }
+
         selectedCountries.append(country)
         searchResults = []
         searchText = ""
         isSearching = false
+            
     }
     
     func isCountrySelected(_ country: Country) -> Bool {
@@ -56,5 +63,9 @@ class CountriesSearchViewModel: ObservableObject {
     
     func removeSelected(at offsets: IndexSet) {
         selectedCountries.remove(atOffsets: offsets)
+    }
+    
+    func didTapMyCountry(country: Country) {
+        self.router.didTapMyCountry(country)
     }
 }
