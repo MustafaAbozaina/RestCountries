@@ -21,7 +21,7 @@ final class NetworkManagerTests: XCTestCase {
         let mockClient = MockHTTPClient(mockData: data)
 
         let sut = NetworkManager(session: mockClient)
-        let endpoint = Endpoint(url: URL(string: anyUrl)!)
+        let endpoint = Endpoint(path: anyUrl)
 
         let result: [MockModel] = try await sut.request(endpoint)
 
@@ -32,7 +32,7 @@ final class NetworkManagerTests: XCTestCase {
         let statusCodes = [200, 201, 202, 204, 299]
         let mockModel = MockModel(id: 1, name: "Test Country")
         let mockData = try JSONEncoder().encode([mockModel])
-        let endpoint = Endpoint(url: URL(string: anyUrl)!)
+        let endpoint = Endpoint(path: anyUrl)
 
         for statusCode in statusCodes {
             let mockClient = MockHTTPClient(mockData: mockData, statusCode: statusCode)
@@ -50,7 +50,7 @@ final class NetworkManagerTests: XCTestCase {
 
     func testRequest_fails_whenStatusCodeIsNot2xx() async throws {
         let statusCodes = [400, 401, 403, 404, 500]
-        let endpoint = Endpoint(url: URL(string: anyUrl)!)
+        let endpoint = Endpoint(path: anyUrl)
 
         for statusCode in statusCodes {
             let mockClient = MockHTTPClient(mockData: Data(), statusCode: statusCode)
