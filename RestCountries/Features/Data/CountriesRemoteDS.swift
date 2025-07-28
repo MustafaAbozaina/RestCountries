@@ -4,7 +4,8 @@
 //
 //  Created by Mustafa Abozaina on 7/28/25.
 //
-import Foundation 
+
+import Foundation
 
 protocol CountriesRemoteDataSource {
     func searchCountries(keyword: String) async throws -> [Country]
