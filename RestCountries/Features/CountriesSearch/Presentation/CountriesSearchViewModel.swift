@@ -15,15 +15,15 @@ class CountriesSearchViewModel: ObservableObject {
     @Published var searchResults: [Country] = []
     
     private var cancellables = Set<AnyCancellable>()
-    private let getCountriesUseCase: GetCountriesUseCase
+    private let useCases: CountriesUseCases
     let router: CountriesSearchRouter
     
     var shouldDisableNewSelection: Bool {
         selectedCountries.count >= 5
     }
 
-    init(getCountriesUseCase: GetCountriesUseCase, router: CountriesSearchRouter) {
-        self.getCountriesUseCase = getCountriesUseCase
+    init(useCases: CountriesUseCases, router: CountriesSearchRouter) {
+        self.useCases = useCases
         self.router = router
         
         $searchText
@@ -35,7 +35,7 @@ class CountriesSearchViewModel: ObservableObject {
             .sink { [weak self] query in
                 Task {
                     do {
-                         let countries = try await self?.getCountriesUseCase.fetchCountries(keyword: query)
+                        let countries = try await self?.useCases.fetchCountries.execute(keyword: query)
                         Task {@MainActor in
                             self?.searchResults = countries ?? []
                         }
@@ -54,7 +54,10 @@ class CountriesSearchViewModel: ObservableObject {
         searchResults = []
         searchText = ""
         isSearching = false
-            
+        
+        Task {
+         try await useCases.saveCountry.execute(country: country)
+        }
     }
     
     func isCountrySelected(_ country: Country) -> Bool {
@@ -67,5 +70,19 @@ class CountriesSearchViewModel: ObservableObject {
     
     func didTapMyCountry(country: Country) {
         self.router.didTapMyCountry(country)
+    }
+    
+    func onAppear() {
+        loadCachedCountries()
+    }
+    
+    // MARK: - Private Methods
+    private func loadCachedCountries() {
+        Task {
+         let cachedCountries = try await self.useCases.getCachedCountries.execute()
+            Task {@MainActor in
+                self.selectedCountries = cachedCountries
+            }
+        }
     }
 }

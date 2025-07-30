@@ -12,19 +12,25 @@ import SwiftData
 struct RestCountriesApp: App {
     
     @StateObject private var navigationManager = NavigationManager()
-    @ObservedObject private var countriesSearchViewModel: CountriesSearchViewModel
-    
-    init() {
-        let navigation = NavigationManager()
-        _navigationManager = StateObject(wrappedValue: navigation)
-        self.countriesSearchViewModel =  CountriesSearchFactory.makeCountriesSearchViewModel(navigationManager: navigation)
-    }
-    
-    var body: some Scene {
-        WindowGroup {
-            Navigator(navigationManager: navigationManager) {
-                CountriesSearchView(viewModel: countriesSearchViewModel)
+    let sharedModelContainer: ModelContainer = {
+        let schema = Schema([
+            CountryEntity.self
+        ])
+        let config = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
+        
+        do {
+            return try ModelContainer(for: schema, configurations: [config])
+        } catch {
+            fatalError("Could not create ModelContainer: \(error)")
+        }
+    }()
+
+        var body: some Scene {
+            WindowGroup {
+                Navigator(navigationManager: navigationManager) {
+                    CountriesSearchView(viewModel: CountriesSearchFactory.makeCountriesSearchViewModel(navigationManager: navigationManager, modelContext: sharedModelContainer.mainContext))
+                }
             }
+            .modelContainer(sharedModelContainer)
         }
     }
-}

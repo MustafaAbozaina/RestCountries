@@ -7,8 +7,8 @@
 
 import Foundation
 
-protocol CountriesRemoteDataSource {
-    func searchCountries(keyword: String) async throws -> [Country]
+protocol CountriesRemoteDataSource: CountriesDataSource {
+    func searchCountries(keyword: String) async throws -> [CountryDTO]
 }
 
 final class DefaultCountriesRemoteDataSource: CountriesRemoteDataSource {
@@ -18,13 +18,13 @@ final class DefaultCountriesRemoteDataSource: CountriesRemoteDataSource {
         self.networkService = networkService
     }
 
-    func searchCountries(keyword: String) async throws -> [Country] {
+    func searchCountries(keyword: String) async throws -> [CountryDTO] {
         let endpoint = Endpoint(
             path: "name/\(keyword)",
             method: .get
         )
         
-        let countries: [Country] = try await networkService.request(endpoint)
+        let countries: [CountryDTO] = try await networkService.request(endpoint)
         return countries
     }
 }

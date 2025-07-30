@@ -8,10 +8,10 @@
 import SwiftUI
 
 struct CountriesSearchView: View {
-    @ObservedObject private var viewModel: CountriesSearchViewModel
-    
+    @StateObject private var viewModel: CountriesSearchViewModel
+
     init(viewModel: CountriesSearchViewModel) {
-        self.viewModel = viewModel
+        _viewModel = StateObject(wrappedValue: viewModel)
     }
     
     var body: some View {
@@ -63,5 +63,8 @@ struct CountriesSearchView: View {
             }
         }
         .searchable(text: $viewModel.searchText, prompt: "Search countries")
+        .onAppear {
+            viewModel.onAppear()
+        }
     }
 }
