@@ -7,19 +7,19 @@
 
 import SwiftData
 
-class DefaultCountriesRepository: CountriesRepository {
+class DefaultCountriesRepository: CountriesRemoteRepository, CountriesCachingRepository {
     private(set) var dataSources: [CountriesDataSource]
     
     init(dataSources: [CountriesDataSource]) {
         self.dataSources = dataSources
     }
     
-    lazy var localDataSource: CountriesLocalDataSource = {
-        dataSources.compactMap { $0 as? CountriesLocalDataSource }.first!
+    lazy var localDataSource: CountriesLocalDataSource? = {
+        dataSources.compactMap { $0 as? CountriesLocalDataSource }.first
     }()
     
     lazy var remoteDataSource: CountriesRemoteDataSource? = {
-        dataSources.compactMap { $0 as? CountriesRemoteDataSource }.first!
+        dataSources.compactMap { $0 as? CountriesRemoteDataSource }.first
     }()
 
     func fetchRemoteCountries(keyword: String) async throws -> [Country] {
@@ -29,17 +29,17 @@ class DefaultCountriesRepository: CountriesRepository {
     
     func saveFavoriteCountry(_ country: Country) throws {
         Task {
-            try await localDataSource.saveCountry(country)
+            try localDataSource?.saveCountry(country)
         }
     }
     
     func getCachedCountries() throws -> [Country] {
-        return try localDataSource.getCachedCountries()
+        return try localDataSource?.getCachedCountries() ?? []
     }
     
     func deleteCountry(_ country: Country) throws {
         Task {
-            try await localDataSource.saveCountry(country)
+            try localDataSource?.deleteCountry(country)
         }
     }
 }

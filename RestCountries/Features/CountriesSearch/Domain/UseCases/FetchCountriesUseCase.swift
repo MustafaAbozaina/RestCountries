@@ -11,9 +11,9 @@ protocol FetchCountriesUseCase {
 }
 
 class DefaultFetchCountriesUseCase: FetchCountriesUseCase {
-    let repository: CountriesRepository
+    let repository: CountriesRemoteRepository
 
-    init(repository: CountriesRepository) {
+    init(repository: CountriesRemoteRepository) {
         self.repository = repository
     }
 

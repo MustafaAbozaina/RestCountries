@@ -9,8 +9,9 @@ import Foundation
 import SwiftData
 
 protocol CountriesLocalDataSource: CountriesDataSource {
-    func saveCountry(_ country: Country) async throws
+    func saveCountry(_ country: Country) throws
     func getCachedCountries() throws ->  [Country]
+    func deleteCountry(_ country: Country) throws
 }
 
 final class DefaultCountriesLocalDataSource: CountriesLocalDataSource {

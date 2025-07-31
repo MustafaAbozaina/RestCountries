@@ -10,9 +10,9 @@ protocol GetCachedCountriesUseCase {
 }
 
 class DefaultGetCachedCountriesUseCase: GetCachedCountriesUseCase {
-    let repository: CountriesRepository
+    let repository: CountriesCachingRepository
 
-    init(repository: CountriesRepository) {
+    init(repository: CountriesCachingRepository) {
         self.repository = repository
     }
 

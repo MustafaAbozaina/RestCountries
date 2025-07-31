@@ -12,9 +12,9 @@ protocol DeleteCountryUseCase {
 }
 
 class DefaultDeleteCountryUseCase: DeleteCountryUseCase {
-    let repository: CountriesRepository
+    let repository: CountriesCachingRepository
 
-    init(repository: CountriesRepository) {
+    init(repository: CountriesCachingRepository) {
         self.repository = repository
     }
 
