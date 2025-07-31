@@ -9,4 +9,5 @@ struct CountriesUseCases {
     let fetchCountries: DefaultFetchCountriesUseCase
     let saveCountry: SaveCountryUseCase
     let getCachedCountries: GetCachedCountriesUseCase
+    let deleteCountry: DeleteCountryUseCase
 }

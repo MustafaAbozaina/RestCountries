@@ -18,6 +18,6 @@ class DefaultFetchCountriesUseCase: FetchCountriesUseCase {
     }
 
     func execute(keyword: String) async throws -> [Country] {
-        try await repository.getCountries(keyword: keyword)
+        try await repository.fetchRemoteCountries(keyword: keyword)
     }
 }

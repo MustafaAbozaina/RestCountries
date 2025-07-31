@@ -17,7 +17,8 @@ class CountriesSearchFactory {
         let saveCountryUseCase: SaveCountryUseCase = DefaultSaveCountryUseCase(repository: repo)
         let getCachedCountriesUseCase = DefaultGetCachedCountriesUseCase(repository: repo)
         let router = DefaultCountriesSearchRouter(navigationManager: navigationManager)
-        let useCases = CountriesUseCases(fetchCountries: fetchCountriesUseCase, saveCountry: saveCountryUseCase, getCachedCountries: getCachedCountriesUseCase)
+        let deleteCountryUseCase = DefaultDeleteCountryUseCase(repository: repo)
+        let useCases = CountriesUseCases(fetchCountries: fetchCountriesUseCase, saveCountry: saveCountryUseCase, getCachedCountries: getCachedCountriesUseCase, deleteCountry: deleteCountryUseCase)
         let viewModel = CountriesSearchViewModel(useCases: useCases, router: router)
         return viewModel
     }

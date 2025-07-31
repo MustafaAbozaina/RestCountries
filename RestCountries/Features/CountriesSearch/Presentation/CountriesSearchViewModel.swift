@@ -65,6 +65,11 @@ class CountriesSearchViewModel: ObservableObject {
     }
     
     func removeSelected(at offsets: IndexSet) {
+        Task {
+            if let index = offsets.first {
+                try await self.useCases.deleteCountry.execute(country: selectedCountries[index])
+            }
+        }
         selectedCountries.remove(atOffsets: offsets)
     }
     
